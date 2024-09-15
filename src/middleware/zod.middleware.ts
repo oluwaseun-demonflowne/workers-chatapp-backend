@@ -1,4 +1,4 @@
-import { type Request,type Response } from "express";
+import { type Request, type Response } from "express";
 import { z } from "zod";
 
 export function zodMiddleware(err: unknown, req: Request, res: Response): void {

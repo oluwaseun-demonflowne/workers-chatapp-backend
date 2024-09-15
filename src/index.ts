@@ -1,6 +1,6 @@
 import express, { type Application } from "express";
 import { type Socket, type ServerOptions } from "socket.io";
-import {type Seen, type Online,type Data } from "./types";
+import { type Seen, type Online, type Data } from "./types";
 import * as http from "http";
 // import { CorsOptions } from "cors";
 // import { Server} from "socket.io";
@@ -29,8 +29,6 @@ const io: SocketIOServer = new SocketIOServer(server, ioOptions);
 app.get("/", (req, res) => res.send("Hello World!"));
 
 let online_Users: Online[] = [];
-
-
 
 io.on("connection", (socket: Socket) => {
   socket.on("new-online", (newEmail: string) => {
@@ -62,7 +60,7 @@ io.on("connection", (socket: Socket) => {
   socket.on("reciever-seen", ({ receiverEmail, senderEmail }: Seen) => {
     io.emit("now-seen-all", {
       receiverEmail,
-      senderEmails:senderEmail,
+      senderEmails: senderEmail,
     });
   });
 
