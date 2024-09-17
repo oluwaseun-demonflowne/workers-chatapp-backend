@@ -19,7 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 
 const ioOptions: Partial<ServerOptions> = {
   cors: {
-    origin: "http://localhost:3000",
+    // origin: "http://localhost:3000",
+    origin: "https://workers-chatapp-frontend.vercel.app",
     methods: ["GET", "POST"],
   },
 };

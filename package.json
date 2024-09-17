@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "build": "tsc --build && tsc-alias",
-    "dev": "nodemon src/main.ts --ext ts",
+    "dev": "nodemon src/index.ts --ext ts",
     "format": "prettier --write .",
     "studio": "npx drizzle-kit studio",
     "push": "npx drizzle-kit push ",
