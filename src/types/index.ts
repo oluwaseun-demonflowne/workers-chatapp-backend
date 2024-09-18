@@ -5,6 +5,7 @@ export type Online = {
   socketId: string;
   socket: Socket;
   typing: boolean;
+  personWhoIamTypingTo: string;
 };
 
 export type newSocket = Socket & {
@@ -23,4 +24,9 @@ export type Data = {
 export type Seen = {
   receiverEmail: string;
   senderEmail: string;
+};
+
+export type Typing = {
+  senderEmail: string;
+  email: string;
 };

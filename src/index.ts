@@ -1,6 +1,6 @@
 import express, { type Application } from "express";
 import { type Socket, type ServerOptions } from "socket.io";
-import { type Seen, type Online, type Data } from "./types";
+import { type Seen, type Online, type Data, type Typing } from "./types";
 import * as http from "http";
 // import { CorsOptions } from "cors";
 // import { Server} from "socket.io";
@@ -34,7 +34,13 @@ let online_Users: Online[] = [];
 io.on("connection", (socket: Socket) => {
   socket.on("new-online", (newEmail: string) => {
     if (!online_Users.some((user) => user.email === newEmail)) {
-      online_Users.push({ email: newEmail, socketId: socket.id, socket: socket, typing: false });
+      online_Users.push({
+        email: newEmail,
+        socketId: socket.id,
+        socket: socket,
+        typing: false,
+        personWhoIamTypingTo: "",
+      });
       io.emit(
         "get-users",
         online_Users.map((i) => ({ email: i.email, socketId: i.socketId }))
@@ -42,17 +48,23 @@ io.on("connection", (socket: Socket) => {
     }
   });
 
-  socket.on("typing", (email: string) => {
+  socket.on("typing", (email: Typing) => {
     io.emit(
       "get-users",
       online_Users.map((i) => {
-        if (i.email === email) {
-          return { email: i.email, sockedId: i.socketId, typing: true };
+        if (i.email === email.senderEmail) {
+          return {
+            email: i.email,
+            sockedId: i.socketId,
+            typing: true,
+            personWhoIamTypingTo: email.email,
+          };
         } else {
           return { email: i.email, sockedId: i.socketId };
         }
       })
     );
+    console.log(online_Users)
   });
 
   socket.on("all-is-seen", ({ receiver }) => {
@@ -70,7 +82,7 @@ io.on("connection", (socket: Socket) => {
       "get-users",
       online_Users.map((i) => {
         if (i.email === email) {
-          return { email: i.email, sockedId: i.socketId, typing: false };
+          return { email: i.email, sockedId: i.socketId, typing: false, personWhoIamTypingTo: "" };
         } else {
           return { email: i.email, sockedId: i.socketId };
         }
